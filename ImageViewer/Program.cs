@@ -16,6 +16,26 @@ class Program
 
         _window = Window.Create(options);
 
+        _window.Load += OnLoad;
+        _window.Update += OnUpdate;
+        _window.Render += OnRender;
         _window.Run();
     }
+
+    private static void OnLoad()
+    {
+        Console.WriteLine("OnLoad");
+    }
+
+    private static void OnUpdate(double deltaTime)
+    {
+
+        Console.WriteLine("OnUpdate");
+    }
+
+    private static void OnRender(double deltaTime)
+    {
+        Console.WriteLine("OnRender");
+    }
+
 }
