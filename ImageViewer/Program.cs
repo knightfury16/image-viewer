@@ -1,10 +1,13 @@
 ﻿using Silk.NET.Windowing;
+using Silk.NET.OpenGL;
+using System.Drawing;
 
 namespace ImageViewer;
 
 class Program
 {
     private static IWindow? _window;
+    private static GL? _gl;
 
     static void Main(string[] args)
     {
@@ -24,18 +27,17 @@ class Program
 
     private static void OnLoad()
     {
-        Console.WriteLine("OnLoad");
+        _gl = _window.CreateOpenGL();
+        _gl.ClearColor(Color.CornflowerBlue);
     }
 
     private static void OnUpdate(double deltaTime)
     {
-
-        Console.WriteLine("OnUpdate");
     }
 
     private static void OnRender(double deltaTime)
     {
-        Console.WriteLine("OnRender");
+        _gl.Clear(ClearBufferMask.ColorBufferBit);
     }
 
 }
