@@ -8,6 +8,7 @@ class Program
 {
     private static IWindow? _window;
     private static GL? _gl;
+    private static uint _vao;
 
     static void Main(string[] args)
     {
@@ -29,6 +30,8 @@ class Program
     {
         _gl = _window.CreateOpenGL();
         _gl.ClearColor(Color.CornflowerBlue);
+        _vao = _gl.GenVertexArray();
+        _gl.BindVertexArray(_vao);
     }
 
     private static void OnUpdate(double deltaTime)
