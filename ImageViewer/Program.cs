@@ -73,7 +73,10 @@ class Program
 
     private static void OnRender(double deltaTime)
     {
-        _gl.Clear(ClearBufferMask.ColorBufferBit);
+
+        var color = colors[currentColorIndex];
+        _gl?.ClearColor(color.X, color.Y, color.Z, 1.0f);
+        _gl?.Clear(ClearBufferMask.ColorBufferBit);
     }
 
 }
