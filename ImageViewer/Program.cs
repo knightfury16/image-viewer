@@ -2,6 +2,7 @@
 using Silk.NET.OpenGL;
 using System.Drawing;
 using System.Numerics;
+using System.Threading.Tasks;
 
 namespace ImageViewer;
 
@@ -19,6 +20,9 @@ class Program
         new Vector3(0.2f, 0.7f, 0.3f), // Greenish
         new Vector3(0.2f, 0.2f, 0.7f)  // Bluish
     };
+
+    static int currentColorIndex = 0;
+    static double timer = 0.0;
 
     static void Main(string[] args)
     {
@@ -55,6 +59,16 @@ class Program
 
     private static void OnUpdate(double deltaTime)
     {
+        // This is where all the logic go
+        //
+        timer += deltaTime;
+
+        if (timer > 2.0f)
+        {
+            currentColorIndex = (currentColorIndex + 1) % colors.Length;
+            timer = 0;
+            Console.WriteLine($"Switched to color index {currentColorIndex}");
+        }
     }
 
     private static void OnRender(double deltaTime)
