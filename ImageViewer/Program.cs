@@ -50,6 +50,8 @@ class Program
             _gl.BufferData(BufferTargetARB.ArrayBuffer, (nuint)(vetices.Length * sizeof(float)), buf, BufferUsageARB.StaticDraw);
 
 
+        _vao = _gl.GenVertexArray();
+        _gl.BindVertexArray(_vao);
 
 
     }
