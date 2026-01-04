@@ -10,6 +10,8 @@ class Program
 {
     private static IWindow? _window;
     private static GL? _gl;
+    private static uint _vbo;
+    private static uint _vao;
 
 
     static void Main(string[] args)
@@ -28,9 +30,28 @@ class Program
         _window.Run();
     }
 
-    private static void OnLoad()
+    private static unsafe void OnLoad()
     {
         _gl = _window.CreateOpenGL();
+        _gl.ClearColor(Color.Teal);
+
+
+        float[] vetices = [
+            +0.5f, +0.5f, 0.0f,
+            +0.5f, -0.5f, 0.0f,
+            -0.5f, +0.5f, 0.0f,
+            -0.5f, -0.5f, 0.0f
+        ];
+
+        _vbo = _gl.GenBuffer();
+        _gl.BindBuffer(BufferTargetARB.ArrayBuffer, _vbo);
+
+        fixed (float* buf = vetices)
+            _gl.BufferData(BufferTargetARB.ArrayBuffer, (nuint)(vetices.Length * sizeof(float)), buf, BufferUsageARB.StaticDraw);
+
+
+
+
     }
 
     private static void OnUpdate(double deltaTime)
@@ -39,6 +60,7 @@ class Program
 
     private static void OnRender(double deltaTime)
     {
+        _gl.Clear(ClearBufferMask.ColorBufferBit);
 
     }
 
