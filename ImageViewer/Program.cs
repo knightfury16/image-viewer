@@ -12,6 +12,7 @@ class Program
     private static GL? _gl;
     private static uint _vbo;
     private static uint _vao;
+    private static uint _ebo;
 
 
     static void Main(string[] args)
@@ -52,6 +53,17 @@ class Program
 
         _vao = _gl.GenVertexArray();
         _gl.BindVertexArray(_vao);
+
+        uint[] indices = [
+            0u, 1u, 3u,
+            1u, 2u, 3u
+        ];
+
+        _ebo = _gl.GenBuffer();
+        _gl.BindBuffer(BufferTargetARB.ElementArrayBuffer, _ebo);
+
+        fixed (uint* buf = indices)
+            _gl.BufferData(BufferTargetARB.ElementArrayBuffer, (nuint)(indices.Length * sizeof(uint)), buf, BufferUsageARB.StaticDraw);
 
 
     }
