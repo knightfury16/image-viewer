@@ -38,6 +38,7 @@ class Program
         _gl.ClearColor(Color.Teal);
 
 
+        // Vertex buffer data declaration and data initialization
         float[] vetices = [
             +0.5f, +0.5f, 0.0f,
             +0.5f, -0.5f, 0.0f,
@@ -49,12 +50,24 @@ class Program
         _gl.BindBuffer(BufferTargetARB.ArrayBuffer, _vbo);
 
         fixed (float* buf = vetices)
+        {
             _gl.BufferData(BufferTargetARB.ArrayBuffer, (nuint)(vetices.Length * sizeof(float)), buf, BufferUsageARB.StaticDraw);
+        }
 
 
+        //Genarate vertex array. This will hold the recipie later
         _vao = _gl.GenVertexArray();
         _gl.BindVertexArray(_vao);
 
+
+        // Element array buffer data declaration and data initialization
+        // Vertex are initialized in clockwise fashion with 0 base index
+        // 0--------------1
+        // -             -
+        // -             -
+        // -             -
+        // -             -
+        // 3--------------2
         uint[] indices = [
             0u, 1u, 3u,
             1u, 2u, 3u
@@ -64,7 +77,9 @@ class Program
         _gl.BindBuffer(BufferTargetARB.ElementArrayBuffer, _ebo);
 
         fixed (uint* buf = indices)
+        {
             _gl.BufferData(BufferTargetARB.ElementArrayBuffer, (nuint)(indices.Length * sizeof(uint)), buf, BufferUsageARB.StaticDraw);
+        }
 
 
         // Shaders 
