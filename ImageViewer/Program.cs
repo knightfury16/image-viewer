@@ -40,10 +40,9 @@ class Program
 
         // Vertex buffer data declaration and data initialization
         float[] vetices = [
-            +0.5f, +0.5f, 0.0f,
-            +0.5f, -0.5f, 0.0f,
-            -0.5f, -0.5f, 0.0f,
-            -0.5f, +0.5f, 0.0f
+            +0.0f, +1.0f, 0.0f,
+            +1.0f, -1.0f, 0.0f,
+            -1.0f, -1.0f, 0.0f
         ];
 
         _vbo = _gl.GenBuffer();
@@ -68,18 +67,18 @@ class Program
         // -             -
         // -             -
         // 3--------------2
-        uint[] indices = [
-            0u, 1u, 3u,
-            1u, 2u, 3u
-        ];
-
-        _ebo = _gl.GenBuffer();
-        _gl.BindBuffer(BufferTargetARB.ElementArrayBuffer, _ebo);
-
-        fixed (uint* buf = indices)
-        {
-            _gl.BufferData(BufferTargetARB.ElementArrayBuffer, (nuint)(indices.Length * sizeof(uint)), buf, BufferUsageARB.StaticDraw);
-        }
+        // uint[] indices = [
+        //     0u, 1u, 3u,
+        //     1u, 2u, 3u
+        // ];
+        //
+        // _ebo = _gl.GenBuffer();
+        // _gl.BindBuffer(BufferTargetARB.ElementArrayBuffer, _ebo);
+        //
+        // fixed (uint* buf = indices)
+        // {
+        //     _gl.BufferData(BufferTargetARB.ElementArrayBuffer, (nuint)(indices.Length * sizeof(uint)), buf, BufferUsageARB.StaticDraw);
+        // }
 
 
         // Shaders 
@@ -146,6 +145,7 @@ class Program
 
 
         // Setting up attribute
+        //Tell VAO How to Read Data
         const uint positionLoc = 0;
         _gl.EnableVertexAttribArray(positionLoc);
         // "Hey VAO, each vertex is 3 floats for position, no gaps"
@@ -170,7 +170,9 @@ class Program
         _gl.Clear(ClearBufferMask.ColorBufferBit);
         _gl.BindVertexArray(_vao);
         _gl.UseProgram(_program);
-        _gl.DrawElements(PrimitiveType.Triangles, 6, DrawElementsType.UnsignedInt, (void*)0);
+        // _gl.DrawElements(PrimitiveType.Triangles, 3, DrawElementsType.UnsignedInt, (void*)0);
+        _gl.DrawArrays(PrimitiveType.Triangles, 0, 3);
+
     }
 
 }
