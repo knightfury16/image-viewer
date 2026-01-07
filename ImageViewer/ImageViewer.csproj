@@ -13,4 +13,9 @@
     <PackageReference Include="Silk.NET.Windowing" Version="2.22.0" />
   </ItemGroup>
 
+    <ItemGroup>
+        <Content Include="./silk.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+    </ItemGroup>
 </Project>
