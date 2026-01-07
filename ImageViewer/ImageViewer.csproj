@@ -15,6 +15,12 @@
   </ItemGroup>
 
     <ItemGroup>
+        <Content Include="./tt.jpg">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
+        <Content Include="./mountain.png">
+            <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+        </Content>
         <Content Include="./silk.png">
             <CopyToOutputDirectory>Always</CopyToOutputDirectory>
         </Content>
