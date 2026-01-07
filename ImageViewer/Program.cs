@@ -16,16 +16,17 @@ class Program
     private static uint _ebo;
     private static uint _program;
     private static uint _texture;
+    private static string _filePath;
 
 
     static void Main(string[] args)
     {
         int width = 800;
         int height = 600;
-        var filePath = args[0];
+        _filePath = args[0];
 
 
-        using (var stream = File.OpenRead(filePath))
+        using (var stream = File.OpenRead(_filePath))
         {
             ImageInfo? info = ImageInfo.FromStream(stream);
             if (info is not null)
@@ -110,7 +111,7 @@ class Program
 
 
         // ImageResult.FromMemory reads the bytes of the .png file and returns all its information!
-        ImageResult result = ImageResult.FromMemory(File.ReadAllBytes("silk.png"), ColorComponents.RedGreenBlueAlpha);
+        ImageResult result = ImageResult.FromMemory(File.ReadAllBytes(_filePath), ColorComponents.RedGreenBlueAlpha);
 
         fixed (byte* ptr = result.Data)
         {
