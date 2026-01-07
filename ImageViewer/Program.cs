@@ -40,10 +40,11 @@ class Program
 
         // Vertex buffer data declaration and data initialization
         float[] vetices = [
-            -0.5f, +0.5f, 0.0f,
-            +0.5f, +0.5f, 0.0f,
-            +0.5f, -0.5f, 0.0f,
-            -0.5f, -0.5f, 0.0f
+            // aPosition         | aTextureCoordinate
+            +0.5f,  +0.5f, +0.0f,  +1.0f, +1.0f,
+            +0.5f, -0.5f,  +0.0f,  +1.0f, +0.0f,
+            -0.5f, -0.5f,  +0.0f,  +0.0f, +0.0f,
+            -0.5f,  +0.5f, +0.0f,  +0.0f, +1.0f
         ];
 
         _vbo = _gl.GenBuffer();
@@ -150,7 +151,7 @@ class Program
         const uint positionLoc = 0;
         _gl.EnableVertexAttribArray(positionLoc);
         // "Hey VAO, each vertex is 3 floats for position, no gaps"
-        _gl.VertexAttribPointer(positionLoc, 3, VertexAttribPointerType.Float, false, 3 * sizeof(float), (void*)0);
+        _gl.VertexAttribPointer(positionLoc, 3, VertexAttribPointerType.Float, false, 5 * sizeof(float), (void*)0);
 
 
         //More cleaning
@@ -173,7 +174,6 @@ class Program
         _gl.UseProgram(_program);
         _gl.DrawElements(PrimitiveType.Triangles, 6, DrawElementsType.UnsignedInt, (void*)0);
         // _gl.DrawArrays(PrimitiveType.Triangles, 0, 3);
-
     }
 
 }
