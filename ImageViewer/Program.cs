@@ -88,20 +88,30 @@ class Program
             #version 330 core
 
             layout (location = 0) in vec3 aPosition;
+            layout (location = 1) in vec2 aTexCoord;
+
+            // Add an output variable to pass the texture coordinate to the fragment shader
+            // This variable stores the data that we want to be received by the fragment
+            out vec2 frag_texCoords;
 
             void main()
             {
                 gl_Position = vec4(aPosition, 1.0);
+
+                // Assigin the texture coordinates without any modification to be recived in the fragment
+                frag_texCoords = aTexCoord;
             }";
 
         const string fragmentCode = @"
             #version 330 core
 
+            in vec2 frag_texCoords;
+
             out vec4 out_color;
 
             void main()
             {
-                out_color = vec4(1.0, 0.5, 0.2, 1.0);
+                out_color = vec4(frag_texCoords.x, frag_texCoords.y, 0.0, 1.0);
             }";
 
         // Creating and compiling vertex shader
@@ -152,6 +162,14 @@ class Program
         _gl.EnableVertexAttribArray(positionLoc);
         // "Hey VAO, each vertex is 3 floats for position, no gaps"
         _gl.VertexAttribPointer(positionLoc, 3, VertexAttribPointerType.Float, false, 5 * sizeof(float), (void*)0);
+
+
+        // For texture
+        const uint texCoordLoc = 1;
+        _gl.EnableVertexAttribArray(texCoordLoc);
+        // The last pointer is important
+        _gl.VertexAttribPointer(texCoordLoc, 2, VertexAttribPointerType.Float, false, 5 * sizeof(float), (void*)(3 * sizeof(float)));
+
 
 
         //More cleaning
