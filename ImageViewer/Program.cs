@@ -3,6 +3,7 @@ using Silk.NET.OpenGL;
 using System.Drawing;
 using System.Numerics;
 using System.Threading.Tasks;
+using StbImageSharp;
 
 namespace ImageViewer;
 
@@ -14,13 +15,27 @@ class Program
     private static uint _vao;
     private static uint _ebo;
     private static uint _program;
+    private static uint _texture;
 
 
     static void Main(string[] args)
     {
+        int width = 800;
+        int height = 600;
+
+        using (var stream = File.OpenRead("./silk.png"))
+        {
+            ImageInfo? info = ImageInfo.FromStream(stream);
+            if (info is not null)
+            {
+                width = info.Value.Width;
+                height = info.Value.Height;
+            }
+        }
+
         WindowOptions options = WindowOptions.Default with
         {
-            Size = new Silk.NET.Maths.Vector2D<int>(800, 600),
+            Size = new Silk.NET.Maths.Vector2D<int>(width, height),
             Title = "Image Viewer"
         };
 
@@ -35,7 +50,7 @@ class Program
     private static unsafe void OnLoad()
     {
         _gl = _window.CreateOpenGL();
-        _gl.ClearColor(Color.Teal);
+        _gl.ClearColor(Color.Black);
 
 
         // Vertex buffer data declaration and data initialization
@@ -83,6 +98,35 @@ class Program
         }
 
 
+
+        // Image as texture
+        //
+        _texture = _gl.GenTexture();
+
+        _gl.ActiveTexture(TextureUnit.Texture0);
+        _gl.BindTexture(TextureTarget.Texture2D, _texture);
+
+
+        // ImageResult.FromMemory reads the bytes of the .png file and returns all its information!
+        ImageResult result = ImageResult.FromMemory(File.ReadAllBytes("silk.png"), ColorComponents.RedGreenBlueAlpha);
+
+        fixed (byte* ptr = result.Data)
+        {
+            _gl.TexImage2D(TextureTarget.Texture2D, 0, InternalFormat.Rgba,
+                    (uint)result.Width, (uint)result.Height, 0, PixelFormat.Rgba, PixelType.UnsignedByte, ptr);
+
+        }
+
+        _gl.TexParameterI(GLEnum.Texture2D, GLEnum.TextureWrapS, (int)TextureWrapMode.Repeat);
+        _gl.TexParameterI(GLEnum.Texture2D, GLEnum.TextureWrapT, (int)TextureWrapMode.Repeat);
+        _gl.TexParameterI(GLEnum.Texture2D, GLEnum.TextureMinFilter, (int)TextureMinFilter.Nearest);
+        _gl.TexParameterI(GLEnum.Texture2D, GLEnum.TextureMagFilter, (int)TextureMagFilter.Nearest);
+
+
+        _gl.BindTexture(TextureTarget.Texture2D, 0);
+
+
+
         // Shaders 
         const string vertexCode = @"
             #version 330 core
@@ -106,12 +150,13 @@ class Program
             #version 330 core
 
             in vec2 frag_texCoords;
-
+            uniform sampler2D uTexture;
             out vec4 out_color;
 
             void main()
             {
-                out_color = vec4(frag_texCoords.x, frag_texCoords.y, 0.0, 1.0);
+                // out_color = vec4(frag_texCoords.x, frag_texCoords.y, 0.0, 1.0);
+                out_color = texture(uTexture, frag_texCoords);
             }";
 
         // Creating and compiling vertex shader
@@ -177,7 +222,15 @@ class Program
         _gl.BindBuffer(BufferTargetARB.ArrayBuffer, 0);
         _gl.BindBuffer(BufferTargetARB.ElementArrayBuffer, 0);
 
+        // More texture stuff
+        int location = _gl.GetUniformLocation(_program, "uTexture");
+        _gl.Uniform1(location, 0);
+        _gl.ActiveTexture(TextureUnit.Texture0);
+        _gl.BindTexture(TextureTarget.Texture2D, _texture);
 
+        //Enabling Transparency
+        _gl.Enable(EnableCap.Blend);
+        _gl.BlendFunc(BlendingFactor.SrcAlpha, BlendingFactor.OneMinusSrcAlpha);
     }
 
 
