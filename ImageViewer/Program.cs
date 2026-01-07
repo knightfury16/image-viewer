@@ -22,8 +22,10 @@ class Program
     {
         int width = 800;
         int height = 600;
+        var filePath = args[0];
 
-        using (var stream = File.OpenRead("./silk.png"))
+
+        using (var stream = File.OpenRead(filePath))
         {
             ImageInfo? info = ImageInfo.FromStream(stream);
             if (info is not null)
