@@ -59,10 +59,10 @@ class Program
         // Vertex buffer data declaration and data initialization
         float[] vetices = [
             // aPosition         | aTextureCoordinate
-            +0.5f,  +0.5f, +0.0f,  +1.0f, +1.0f,
-            +0.5f, -0.5f,  +0.0f,  +1.0f, +0.0f,
-            -0.5f, -0.5f,  +0.0f,  +0.0f, +0.0f,
-            -0.5f,  +0.5f, +0.0f,  +0.0f, +1.0f
+            +0.5f,  +0.5f, +0.0f,  +1.0f, +0.0f,
+            +0.5f, -0.5f,  +0.0f,  +1.0f, +1.0f,
+            -0.5f, -0.5f,  +0.0f,  +0.0f, +1.0f,
+            -0.5f,  +0.5f, +0.0f,  +0.0f, +0.0f
         ];
 
         _vbo = _gl.GenBuffer();
